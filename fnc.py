@@ -1,7 +1,5 @@
-from os import remove
-import string
-
 def get_index(A, index):
+    """Retorna valor de index relativo ao tamanho da fórmula"""
     if index >= len(A):
         index = 0
     else:
@@ -12,8 +10,8 @@ def get_index(A, index):
 # ...(-p> |-> -p
 # ...((...)> |-> (...)
 # ...(-(...)> |-> -(...)
-# Retorna subfórmula a esquerda de >
 def get_subform_left(A, index):
+    """Retorna subfórmula a esquerda de >"""
     open_parenthesis = close_parenthesis = 0
     subform_left = ""
     while close_parenthesis >= open_parenthesis:
@@ -30,8 +28,8 @@ def get_subform_left(A, index):
 # >-p)... |-> -p
 # >(...))... |-> (...)
 # >-(...))... |-> -(...)
-# Retorna subfórmula a direita de >
 def get_subform_right(A, index):
+    """Retorna subfórmula a direita de >"""
     open_parenthesis = close_parenthesis = 0
     subform_right = ""
     while open_parenthesis >= close_parenthesis:
@@ -46,8 +44,8 @@ def get_subform_right(A, index):
 
 # ...-(-(p^q)#(p>q))... |-> pos(#)
 # ...((...)x(...))... |-> pos(x)
-# Retorna operando principal da formula
 def get_key(A, index):
+    """Retorna operando principal da formula"""
     open_parenthesis = close_parenthesis = 0
     while index < len(A):
         if A[index] == "(":
@@ -68,13 +66,14 @@ def get_key(A, index):
 # ...((p>q)>p)...
 # ...((...)>(...))... |-> ...(-(...)#(...))...
 def get_remove_implication(A, subform_left, subform_right, index):
+    """Remove implicação de uma fórmula"""
     A_right = A[index + 1:]
     A_left = A[:index - len(subform_left)]
     return A_left + "-" + subform_left + "#" + A_right 
 
 # ...(--(...)>--(...))... |-> ...((...)>(...))...
-# Remove dupla negação
 def remove_double_negation(A):
+    """Remove dupla negação"""
     A = A.replace("--", "")
     return A
 
@@ -84,8 +83,8 @@ def remove_double_negation(A):
 # ...(-p>-q)...
 # ...((p>q)>p)...
 # (((...>...)>(...>...))>(...>...)) |-> (-(-(-...#...)#(-...#...))#(-...#...))
-# Remove todas as > da fórmula
 def remove_implication(A):
+    """Remove todas as > da fórmula"""
     index = 0
     while ">" in A:
         index += 1
@@ -104,8 +103,8 @@ def remove_implication(A):
 # -(p#q) |-> (-p^-q)
 # -((...)#(...)) |-> (-(...)^-(...))
 # -((...)^(...)) |-> (-(...)#-(...))
-# Aplica lei de Morgan
 def get_morgan_law(A, subform_left, subform_right, index):
+    """Aplica lei de Morgan"""
     if A[index] == "#":
         key = "^"
     elif A[index] == "^":
@@ -118,8 +117,8 @@ def get_morgan_law(A, subform_left, subform_right, index):
 # -(p^q) |-> (-p#-q)
 # -(p#q) |-> (-p^-q)
 # -((...#...)#(...#...)) |-> ((-...^-...)^(-...^-...))
-# Aplica Morgan a toda a fórmula
 def morgan_law(A):
+    """Aplica Morgan a toda a fórmula"""
     index = 0
     while "-(" in A:
         if "-(" in A[index:index + 2]:
@@ -134,8 +133,8 @@ def morgan_law(A):
 
 # (r#(p^q)) |-> ((r#p)^(r#q))
 # ...((...)#((...)^(...)))... |-> ...(((...)#(...))^((...)#(...)))
-# Aplica distributividade da esquerda para direita
 def get_distributivity_lr(A, index):
+    """Aplica distributividade da esquerda para direita"""
     # Principal da fórmula
     first_key = A[index]
 
@@ -157,8 +156,8 @@ def get_distributivity_lr(A, index):
 
 # ((p^q)#r) |-> ((p#r)^(q#r))
 # ...(((...)^(...))#(...))... |-> ...(((...)#(...))^((...)#(...)))
-# Aplica distributividade da direita para esquerda
 def get_distributivity_rl(A, index):
+    """Aplica distributividade da direita para esquerda"""
     # Principal da fórmula
     first_key = A[index]
 
@@ -178,8 +177,8 @@ def get_distributivity_rl(A, index):
         return A_left + "(" + second_subform_left + first_key + subform_right + ")" + second_key + "(" + second_subform_right + first_key + subform_right + ")" + A_right, index - len(subform_left)
     return A, index
 
-# Aplica distributividade em toda a fórmula
 def distributivity(A):
+    """Aplica distributividade em toda a fórmula"""
     index = 0
     '''
     while "#(" in A or ")#" in A:
@@ -205,11 +204,10 @@ def distributivity(A):
     return A
 
 # A <-> A1 <-> A2 <-> A3 = B
-# Função main
-def fnc():
-    A = "((p#q)>-(q#r))"
+def fnc(A):
+    """Função principal de conversão em fnc"""
+    #A = "((p#q)>-(q#r))"
     print(A)
-    #A = input("Insira uma fórmula VÁLIDA: ")
     print("Removendo todas as implicações: ")
     A1 = remove_implication(A)
     print(A1)
@@ -224,4 +222,14 @@ def fnc():
     print(B)
     return(B)
 
-fnc()
+def main():
+    r = True
+    while(r):
+        print("CONVERSÃO DE FÓRMULA EM FNC: ")
+        print("OBS: usar fórmulas válidas...")
+        A = input("Insira uma fórmula: ")
+        A = fnc(A)
+        r = input("Repetir? [S-N] ")
+        if r != "S" and r != "s":
+            r = False
+#main()
