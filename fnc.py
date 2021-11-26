@@ -90,7 +90,6 @@ def remove_implication(A):
     while ">" in A:
         index += 1
         if(A[index] == ">"):
-            input()
             print(A, index)
             subform_left = get_subform_left(A, index)
             #print("subform_left = " + subform_left)
@@ -124,7 +123,6 @@ def morgan_law(A):
     index = 0
     while "-(" in A:
         if "-(" in A[index:index + 2]:
-            input()
             print(A, index)
             index_key = get_key(A, index + 1)
             subform_left = get_subform_left(A, index_key)
@@ -182,8 +180,8 @@ def get_distributivity_rl(A, index):
 
 # Aplica distributividade em toda a fórmula
 def distributivity(A):
-    '''
     index = 0
+    '''
     while "#(" in A or ")#" in A:
         if "#(" in A[index:index + 2]:
             input()
@@ -196,15 +194,14 @@ def distributivity(A):
 
         index = get_index(A, index)
     '''
-    for index in range(len(A)):
+    while index < len(A):
         if "#(" in A[index:index + 2]:
-            input()
             print(A, index)
             A, index = get_distributivity_lr(A, index)
         if ")#" in A[index:index + 2]:
-            input()
             print(A, index + 1)
             A, index = get_distributivity_rl(A, index + 1)
+        index += 1
     return A
 
 # A <-> A1 <-> A2 <-> A3 = B
