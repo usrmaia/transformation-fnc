@@ -49,7 +49,12 @@ def main():
         print(A4)
         console_text_distributivity["text"] = A4
 
-        B = A4
+        print("Aplicando distributividade com novo átomo: ")
+        A5 = distributivity_new_aton(A3)
+        print(A5)
+        console_text_distributivity_new_atom["text"] = A5
+
+        B = A5
         
         print("Resultado: ")
         print(B)
@@ -89,7 +94,11 @@ ttk.Label(frm, text="Aplicando distributividade:").grid(column=0, row=13)
 console_text_distributivity = ttk.Label(frm, text="", justify="center")
 console_text_distributivity.grid(column=0, row=14)
 
-ttk.Label(frm, text="Resultado:").grid(column=0, row=15)
+ttk.Label(frm, text="Aplicando distributividade com novo átomo:").grid(column=0, row=15)
+console_text_distributivity_new_atom = ttk.Label(frm, text="", justify="center")
+console_text_distributivity_new_atom.grid(column=0, row=16)
+
+ttk.Label(frm, text="Resultado:").grid(column=0, row=17)
 console_text_return = ttk.Label(frm, text="", justify="center")
-console_text_return.grid(column=0, row=16)
+console_text_return.grid(column=0, row=18)
 root.mainloop()

@@ -93,6 +93,59 @@ def get_distributivity_rl(formula, operator_or, operator_and):
 
     return f"{no_modification_left}({subform_left}#{subform_right})&({subform_middle}#{subform_right}){no_modification_right}", 0
 
+def distributivity_new_aton(formula):
+    index = 0
+    while index < len(formula):
+        # Existir "#(" ou ")#" é apenas a primeira condição para se aplicar a distributividade
+        # A segunda condição é existir "#(A&B)" ou "(A&B)#"
+        if "#(" in formula[index:index + 2]: # "#("
+            operator_and = get_operator(formula, index + 1)
+            if formula[operator_and] == "&": # "#(A&B)"
+                print(formula, index, operator_and)
+                formula, index = get_distributivity_new_atom_lr(formula, index, operator_and)
+        if ")#" in formula[index:index + 2]: # "(#"
+            len_subform_left = len(get_subform_left(formula, index + 1))
+            operator_and = get_operator(formula, index + 1 - len_subform_left)
+            if formula[operator_and] == "&": # "(A&B)#"
+                print(formula, index + 1, operator_and)
+                formula, index = get_distributivity_new_atom_rl(formula, index + 1, operator_and)
+        index += 1
+    return formula
+
+def get_distributivity_new_atom_lr(formula, operator_or, operator_and):
+    # ...(A#(B&C))... |-> ...(((A#p)&((¬p#B)&(¬p#C)))&((¬B#¬C)#p))...
+    # Parenteses externo da fórmula
+    subform_left = get_subform_left(formula, operator_or)
+    no_modification_left = formula[:operator_or - len(subform_left)]
+    subform_right = get_subform_right(formula, operator_or)
+    no_modification_right = formula[operator_or + len(subform_right) + 1:]
+
+    # Parenteses interno da fórmula
+    subform_middle = get_subform_left(formula, operator_and)
+    subform_right = get_subform_right(formula, operator_and)
+    
+    new_operator = get_unprecedented(formula)
+
+    return f"{no_modification_left}(({subform_left}#{new_operator})&((¬{new_operator}#{subform_middle})&(¬{new_operator}#{subform_right})))&((¬{subform_middle}#¬{subform_right})#{new_operator}){no_modification_right}", 0
+    #return f"{no_modification_left}({subform_left}#{new_operator})&(¬{new_operator}#{subform_middle})&(¬{new_operator}#{subform_right})&(¬{subform_middle}#¬{subform_right}#{new_operator}){no_modification_right}", 0
+    
+def get_distributivity_new_atom_rl(formula, operator_or, operator_and):
+    # ...((A&B)#C)... |-> ...(((C#p)&((¬p#A)&(¬p#B)))&((¬A#¬B)#p))...
+    # Parenteses externo da fórmula
+    subform_left = get_subform_left(formula, operator_or)
+    no_modification_left = formula[:operator_or - len(subform_left)]
+    subform_right = get_subform_right(formula, operator_or)
+    no_modification_right = formula[operator_or + len(subform_right) + 1:]
+
+    # Parenteses interno da fórmula    
+    subform_left = get_subform_left(formula, operator_and)
+    subform_middle = get_subform_right(formula, operator_and)
+    
+    new_operator = get_unprecedented(formula)
+
+    return f"{no_modification_left}(({subform_right}#{new_operator})&((¬{new_operator}#{subform_left})&(¬{new_operator}#{subform_middle})))&((¬{subform_left}#¬{subform_middle})#{new_operator}){no_modification_right}", 0
+    #return f"{no_modification_left}({subform_right}#{new_operator})&(¬{new_operator}#{subform_left})&(¬{new_operator}#{subform_middle})&(¬{subform_left}#¬{subform_middle}#{new_operator}){no_modification_right}", 0
+
 if __name__ == "__main__":
     system("cls")
     #system("clear")
@@ -110,6 +163,9 @@ if __name__ == "__main__":
         A3 = remove_double_negation(A2)
         print(A3)
         print("Aplicando distributividade: ")
-        B = distributivity(A3)
-        print(B)
+        A4 = distributivity(A3)
+        print(A4)
+        print("Aplicando distributividade com novo átomo: ")
+        A5 = distributivity_new_aton(A3)
+        print(A5)
         system("pause")

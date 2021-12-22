@@ -1,3 +1,6 @@
+from string import ascii_lowercase
+from os import system
+
 def get_subform_left(formula, operator):
     # ...(A>... |-> A
     index = operator
@@ -49,3 +52,17 @@ def get_operator(formula, operator):
                 return index
         index += 1
     return None
+
+def get_unprecedented(formula):
+    for symbol in ascii_lowercase:
+        if not symbol in formula:
+            return symbol
+    return "1"
+
+if __name__ == "__main__":
+    system("cls")
+    #system("clear")
+    while True:
+        formula = input("Fórmula: ")
+        if formula == 'q': break
+        print(get_unprecedented(formula))
