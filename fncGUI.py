@@ -1,25 +1,27 @@
-import fnc
+from transformation_fnc import *
+from verify_semantics import *
+from verify_syntax import *
 from tkinter import *
 from tkinter import ttk
 
 def ttk_button():
     try:
         A = form.get()    
-        console_text_return["text"] = fnc.fnc(A)
+        console_text_return["text"] = fnc(A)
 
-        A1 = fnc.remove_implication(A)
+        A1 = remove_implication(A)
         console_text_remove_implication["text"] = A1
 
-        A2 = fnc.morgan_law(A1)
+        A2 = morgan_law(A1)
         console_text_morgan_law["text"] = A2
 
-        A3 = fnc.remove_double_negation(A2)
+        A3 = remove_double_negation(A2)
         console_text_remove_double_negation["text"] = A3
 
-        B = fnc.distributivity(A3)
+        B = distributivity(A3)
         console_text_distributivity["text"] = B
 
-        console_text_return2["text"] = fnc.fnc(A)
+        console_text_return2["text"] = fnc(A)
     except:
         print("INSIRA UMA FÓRMULA VÁLIDA!!!")
 
