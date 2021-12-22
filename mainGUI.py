@@ -50,12 +50,14 @@ def main():
         console_text_distributivity["text"] = A4
 
         B = A4
-
+        
+        print("Resultado: ")
         print(B)
         console_text_return["text"] = B
 
 root = Tk()
 root.title("Transformação em FNC")
+root.geometry("+900+100")
 frm = ttk.Frame(root, padding=100)
 frm.grid()
 ttk.Label(frm, text="Insira uma fórmula:").grid(column=0, row=0)
