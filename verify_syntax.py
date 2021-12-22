@@ -7,6 +7,7 @@ def verify_syntax(formula):
     for symbol in formula:
         if not symbol in symbols:
             # Se símbolo da formula NÃO faz parte do conjunto de símbolos
+            print(f"Símbolo '{symbol}' inválido!")
             return False
     return True
 
