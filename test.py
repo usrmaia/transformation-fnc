@@ -1,5 +1,5 @@
 from string import ascii_lowercase
-from useful_formula import *
+from useful import *
 '''
 formula = "(a>c>b)"
 index = 2
