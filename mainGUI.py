@@ -63,7 +63,7 @@ def main():
 root = Tk()
 root.title("Transformação em FNC")
 root.geometry("+900+100")
-frm = ttk.Frame(root, padding=100)
+frm = ttk.Frame(root, padding=100) 
 frm.grid()
 ttk.Label(frm, text="Insira uma fórmula:").grid(column=0, row=0)
 form = Entry(frm, justify="center")
